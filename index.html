@@ -1,0 +1,95 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>바이낸스 현황</title><meta name="theme-color" content="#121417"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex"><style>
+:root{--bg:#f2f2ef;--fg:#111;--mut:#6f6f6b;--card:#fbfbf9;--line:#e4e4df;--pos:#0a8a4a;--neg:#d0342c;--warn:#b26a00;--chip:#ecece8;--accent:#2f6fde;--hl:#e3ebf7}
+@media (prefers-color-scheme:dark){:root{--bg:#121417;--fg:#e6e8eb;--mut:#9aa3ad;--card:#1b1e22;--line:#2b3036;--pos:#3ecf7e;--neg:#ff6b6b;--warn:#f0b44c;--chip:#252a30;--accent:#6ea0ff;--hl:#1f2a3a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 -apple-system,"Segoe UI","Malgun Gothic",sans-serif}
+header{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header b{font-size:16px}header nav a{color:var(--mut);margin-right:10px;text-decoration:none}#age{color:var(--mut);margin-left:auto}
+button{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+main{max-width:1200px;margin:0 auto;padding:8px 16px 40px}section{margin-top:18px}h2{font-size:18px;margin:8px 0;border-left:4px solid var(--fg);padding-left:8px}
+h3{font-size:14px;margin:16px 0 6px;color:var(--mut)}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}.card .k{color:var(--mut);font-size:12px}.card .v{font-size:20px;font-weight:600}
+.card.big .v{font-size:26px}.card .s{font-size:12px;color:var(--mut)}.card.big .s{font-size:16px;font-weight:600}
+.days{display:flex;gap:6px;flex-wrap:wrap}.day{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:4px 8px;text-align:center;min-width:70px}.day .k{font-size:11px;color:var(--mut)}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}table{border-collapse:collapse;width:100%}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--mut);font-weight:600;white-space:nowrap}
+td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}td.why{font-size:12px;color:var(--mut);min-width:220px}small{color:var(--mut)}
+.pos{color:var(--pos)}.neg{color:var(--neg)}.warn{color:var(--warn);font-weight:600}.bad{color:var(--neg);font-weight:600}.note{color:var(--mut);font-size:12px;margin:4px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{background:var(--chip);border-radius:12px;padding:2px 10px;font-size:12px}.chip.ok{color:var(--fg)}.chip.warn{color:var(--warn)}.chip.bad{color:var(--neg)}
+details{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin:6px 0}summary{cursor:pointer}
+pre{white-space:pre-wrap;word-break:break-all;font-size:12px;margin:6px 0}
+html,body{overflow-x:hidden}main,section,.cards>*,details{min-width:0;max-width:100%}td{overflow-wrap:anywhere}td.nw{white-space:nowrap}
+ul.log,ul.why{margin:6px 0;padding-left:18px}ul.log li{font-size:12px}ul.why li{font-size:13px;color:var(--mut)}.t{color:var(--mut)}
+#phone{margin:10px 0}#qr{background:#fff;padding:10px;display:inline-block;border-radius:8px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.pc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.sym{font-size:17px}.tag{font-size:12px;color:var(--mut)}
+.pc-pnl{font-size:20px;font-weight:700;text-align:right;line-height:1.2}.pc-pnl small{display:block;font-size:12px;font-weight:400}
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-top:8px}.pc-grid div{font-size:14px}.pc-grid span{display:block;font-size:11px;color:var(--mut)}
+.pc-why{font-size:12px;color:var(--mut);border-top:1px dashed var(--line);margin-top:8px;padding-top:6px}
+.lst{background:var(--card);border:1px solid var(--line);border-radius:10px}.li{padding:8px 12px;border-bottom:1px solid var(--line)}.li:last-child{border-bottom:0}
+.l1,.l2{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.l2{font-size:12px;color:var(--mut)}.l3{font-size:12px;color:var(--mut)}
+/* 11-11 사용자: 폰 크롬 전용 — 폭과 상관없이 항상 폰 화면 (표는 줄마다 카드, 칸 이름은 왼쪽 = add_labels 의 data-l) */
+main{max-width:560px}header{max-width:560px;margin:0 auto}
+@media all{
+body{font-size:15px}main{padding:4px 12px 60px}
+header{padding:8px 12px;gap:6px}header b{font-size:15px}#age{font-size:12px}button{padding:8px 12px;font-size:14px}
+header nav{order:9;flex-basis:100%;display:flex;gap:6px}header nav a{flex:1;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:7px 0;margin:0;color:var(--fg);font-size:14px}
+h2{font-size:17px}h3{font-size:14px;margin:14px 0 6px}
+.cards{grid-template-columns:1fr 1fr;gap:8px}.card{padding:9px 10px}.card .v{font-size:18px}.card.big{grid-column:1/-1}.card.big .v{font-size:26px}
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.day{min-width:0;padding:4px 2px}.day .v{font-size:13px}
+.tw{overflow:visible;background:none;border:0}table.rt,table.rt tbody,table.rt tr,table.rt td{display:block;width:100%}
+table.rt tr:first-child{display:none}
+table.rt tr{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:8px}
+table.rt td{border:0;padding:3px 0;display:flex;justify-content:space-between;align-items:baseline;gap:12px;text-align:right;white-space:normal}
+table.rt td::before{content:attr(data-l);color:var(--mut);font-size:12px;text-align:left;flex:0 0 38%;white-space:normal}
+table.rt td:first-child{font-weight:600;font-size:15px}
+table.rt td.why{display:block;text-align:left;min-width:0;font-size:12px;border-top:1px dashed var(--line);margin-top:4px;padding-top:6px}table.rt td.why::before{display:block;margin-bottom:2px}
+table.rt td.nw{white-space:normal}td small{margin-left:4px}table.rt td br{display:none}
+details{padding:10px 12px}summary{font-size:14px}.chip{font-size:12px;padding:4px 10px}
+}
+/* 11-11 사용자: 드러켄밀러 트래커 (bizar-r.github.io) 같은 모양 — 밝은 바탕, 큰 제목, 둥근 카드, 크고 굵은 숫자, 섹션은 흰 상자 */
+body{font:15px/1.5 -apple-system,"Apple SD Gothic Neo","Pretendard","Malgun Gothic",sans-serif;letter-spacing:-.01em}
+.hero{max-width:560px;margin:0 auto;padding:22px 16px 6px}.hero h1{font-size:27px;font-weight:800;margin:0 0 6px;letter-spacing:-.03em}
+.hero .sub{color:var(--mut);font-size:14px;margin:2px 0}.hero .sub#age{margin-top:8px}.hero .sub#age.bad{color:var(--neg);font-weight:600}
+header{position:sticky;top:0;background:var(--bg);border:0;padding:8px 16px 10px}header nav a{border-radius:999px!important;font-weight:600}
+main{padding:4px 16px 60px}section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 16px 10px;margin-top:14px}
+section h2{border:0;padding:0;font-size:19px;font-weight:800;margin:0 0 10px;letter-spacing:-.02em}
+section h3{color:var(--fg);font-size:15px;font-weight:700;margin:18px 0 8px}
+.card{border-radius:16px;padding:14px 16px;background:var(--bg);border:1px solid var(--line)}.card .k{font-size:13px;color:var(--mut)}
+.card .v{font-size:24px;font-weight:800;letter-spacing:-.03em;margin:4px 0 2px}.card.big .v{font-size:32px}.card .s{font-size:13px}.card.big .s{font-size:16px}
+.day{border-radius:12px;background:var(--bg)}.pc,.lst,details,table.rt tr{border-radius:14px;background:var(--bg)}
+.pc{padding:12px 14px}.pc-pnl{font-size:22px}.sym{font-size:18px;font-weight:800}
+.cards>.card:nth-child(4):last-child{grid-column:1/-1}.li:first-child{border-top-left-radius:14px;border-top-right-radius:14px}button{border-radius:999px}
+</style></head><body><div class="hero"><h1>바이낸스 자동매매 현황</h1><div class="sub">USDT-M 선물 실계좌 · 데이터 · 전략 발굴</div><div class="sub" id="age"></div></div><header><nav><a href="#live">실계좌</a><a href="#data">데이터</a><a href="#disc">발굴·섀도</a><a href="#" onclick="load();return false">↻ 새로</a></nav></header><main id="m"><p>불러오는 중…</p></main><script>
+const DATA='https://raw.githubusercontent.com/bizar-r/binance-status/data/status.json';
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));const te=new TextEncoder();
+let built=0;
+function getPw(){const m=location.hash.match(/k=([^&]+)/);if(m){try{localStorage.setItem('pw',decodeURIComponent(m[1]))}catch(e){}history.replaceState(null,'',location.pathname);}
+  try{return localStorage.getItem('pw')}catch(e){return null}}
+async function dec(d,pw){
+  const base=await crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deriveBits']);
+  const k=new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt:b64(d.salt),iterations:d.iter,hash:'SHA-256'},base,512));
+  const ek=k.slice(0,32),mk=k.slice(32),nonce=b64(d.nonce),ct=b64(d.ct);
+  const hk=await crypto.subtle.importKey('raw',mk,{name:'HMAC',hash:'SHA-256'},false,['verify']);
+  const msg=new Uint8Array(nonce.length+ct.length);msg.set(nonce);msg.set(ct,nonce.length);
+  if(!await crypto.subtle.verify('HMAC',hk,b64(d.mac),msg))throw new Error('pw');
+  const n=Math.ceil(ct.length/32),jobs=[];
+  for(let i=0;i<n;i++){const b=new Uint8Array(32+nonce.length+4);b.set(ek);b.set(nonce,32);new DataView(b.buffer).setUint32(32+nonce.length,i);jobs.push(crypto.subtle.digest('SHA-256',b));}
+  const ks=await Promise.all(jobs),out=new Uint8Array(ct.length);
+  for(let i=0;i<ct.length;i++)out[i]=ct[i]^new Uint8Array(ks[i>>5])[i&31];
+  const txt=await new Response(new Blob([out]).stream().pipeThrough(new DecompressionStream('deflate'))).text();
+  return JSON.parse(txt);}
+function tick(){if(!built)return;const s=Math.round(Date.now()/1000-built),el=document.getElementById('age');
+  const t=new Date(built*1000).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
+  el.textContent='마지막 갱신 '+t+' ('+(s<90?s+'초':Math.round(s/60)+'분')+' 전)';el.className='sub'+(s>900?' bad':'');if(s>900)el.textContent+=' · PC 올리기 멈춤?';}
+async function load(){const pw=getPw();const m=document.getElementById('m');
+  if(!pw){m.innerHTML=LOGIN;return;}
+  try{const r=await fetch(DATA+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('net '+r.status);
+    const open=[...m.querySelectorAll('details')].map(d=>d.open);const j=await dec(await r.json(),pw);
+    m.innerHTML=j.html;built=j.built;m.querySelectorAll('details').forEach((d,i)=>{if(open[i])d.open=true});tick();}
+  catch(e){if(e.message==='pw'){try{localStorage.removeItem('pw')}catch(_){};m.innerHTML=LOGIN;}else document.getElementById('age').textContent='받기 실패 — 잠시 뒤 다시';}}
+function login(){const v=document.getElementById('pw').value.trim();if(!v)return;try{localStorage.setItem('pw',v)}catch(e){};load();}
+const LOGIN="<section><h2>로그인</h2><p>텔레그램으로 받은 링크를 누르거나 비밀번호를 넣어 주세요 (이 폰에 저장됩니다).</p><p><input id='pw' type='password' style='width:100%;padding:10px;font-size:16px'></p><p><button onclick='login()'>열기</button></p></section>";
+setInterval(tick,5000);setInterval(()=>{if(!document.hidden)load()},60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});load();
+</script></body></html>
