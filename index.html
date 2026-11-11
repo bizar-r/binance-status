@@ -60,11 +60,19 @@ section h3{color:var(--fg);font-size:15px;font-weight:700;margin:18px 0 8px}
 .day{border-radius:12px;background:var(--bg)}.pc,.lst,details,table.rt tr{border-radius:14px;background:var(--bg)}
 .pc{padding:12px 14px}.pc-pnl{font-size:22px}.sym{font-size:18px;font-weight:800}
 .card.wide{grid-column:1/-1}.nm{word-break:break-all}
-.calh{display:flex;justify-content:space-between;align-items:baseline;margin:10px 2px 6px}.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.calh{display:flex;justify-content:space-between;align-items:center;margin:10px 0 8px}.calt{text-align:center;line-height:1.35}
+button.nav{width:40px;height:40px;border-radius:50%;font-size:22px;line-height:1;padding:0;background:var(--bg)}button.nav:disabled{opacity:.25}
+.tabs{display:flex;gap:6px;margin-bottom:8px}button.cht{flex:1;padding:7px 0;font-weight:600;background:var(--bg)}button.cht.on{background:var(--fg);color:var(--card);border-color:var(--fg)}
+.chs{margin:2px 0 4px}.chs b{font-size:22px}svg.chart{width:100%;height:190px;display:block}.zl{stroke:var(--line);stroke-width:1;stroke-dasharray:3 3}.ax{font-size:10px;fill:var(--mut)}.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .cw{text-align:center;font-size:11px;color:var(--mut);padding:2px 0}.cd{background:var(--bg);border:1px solid var(--line);border-radius:8px;min-height:46px;padding:3px 2px;text-align:center;overflow:hidden}
 .cd.out{background:none;border:0}.cn{font-size:11px;color:var(--mut)}.cv{font-size:11px;font-weight:700;letter-spacing:-.04em;white-space:nowrap}
 .cd.up{background:rgba(10,138,74,.10)}.cd.up .cv{color:var(--pos)}.cd.dn{background:rgba(208,52,44,.10)}.cd.dn .cv{color:var(--neg)}.cd.today{border:2px solid var(--fg)}.li:first-child{border-top-left-radius:14px;border-top-right-radius:14px}button{border-radius:999px}
-</style></head><body><div class="hero"><h1>바이낸스 자동매매 현황</h1><div class="sub">USDT-M 선물 실계좌 · 데이터 · 전략 발굴</div><div class="sub" id="age"></div></div><header><nav><a href="#live">실계좌</a><a href="#data">데이터</a><a href="#disc">발굴·섀도</a><a href="#" onclick="load();return false">↻ 새로</a></nav></header><main id="m"><p>불러오는 중…</p></main><script>
+</style></head><body><div class="hero"><h1>바이낸스 자동매매 현황</h1><div class="sub">USDT-M 선물 실계좌 · 데이터 · 전략 발굴</div><div class="sub" id="age"></div></div><header><nav><a href="#live">실계좌</a><a href="#data">데이터</a><a href="#disc">발굴·섀도</a></nav></header><main id="m"><p>불러오는 중…</p></main><script>let calI=0,chI=0;
+function calShow(){const ms=document.querySelectorAll('.calm');if(!ms.length)return;calI=Math.max(0,Math.min(calI,ms.length-1));ms.forEach((m,i)=>m.style.display=i==calI?'':'none');}
+function calNav(d){calI+=d;calShow();}
+function chTab(i){chI=i;document.querySelectorAll('.chp').forEach((p,j)=>p.style.display=j==i?'':'none');document.querySelectorAll('.cht').forEach((b,j)=>b.classList.toggle('on',j==i));}
+function uiRestore(){calShow();chTab(chI);}
+
 const DATA='https://raw.githubusercontent.com/bizar-r/binance-status/data/status.json';
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));const te=new TextEncoder();
 let built=0;
@@ -90,7 +98,7 @@ async function load(){const pw=getPw();const m=document.getElementById('m');
   if(!pw){m.innerHTML=LOGIN;return;}
   try{const r=await fetch(DATA+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('net '+r.status);
     const open=[...m.querySelectorAll('details')].map(d=>d.open);const j=await dec(await r.json(),pw);
-    m.innerHTML=j.html;built=j.built;m.querySelectorAll('details').forEach((d,i)=>{if(open[i])d.open=true});tick();}
+    m.innerHTML=j.html;built=j.built;m.querySelectorAll('details').forEach((d,i)=>{if(open[i])d.open=true});uiRestore();tick();}
   catch(e){if(e.message==='pw'){try{localStorage.removeItem('pw')}catch(_){};m.innerHTML=LOGIN;}else document.getElementById('age').textContent='받기 실패 — 잠시 뒤 다시';}}
 function login(){const v=document.getElementById('pw').value.trim();if(!v)return;try{localStorage.setItem('pw',v)}catch(e){};load();}
 const LOGIN="<section><h2>로그인</h2><p>텔레그램으로 받은 링크를 누르거나 비밀번호를 넣어 주세요 (이 폰에 저장됩니다).</p><p><input id='pw' type='password' style='width:100%;padding:10px;font-size:16px'></p><p><button onclick='login()'>열기</button></p></section>";
