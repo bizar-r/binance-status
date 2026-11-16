@@ -89,7 +89,13 @@ function openSet(m,s){m.querySelectorAll('details').forEach((d,i)=>{if(s.has(dk(
 document.addEventListener('click',e=>{const a=e.target.closest('nav a');if(!a)return;const sec=document.querySelector(a.getAttribute('href'));
   const f=sec&&sec.querySelector(':scope>details.fold');if(f)f.open=true;});
 
+// 11-16: raw 주소는 CDN 이 5분 묶어 둠 (실측) → GitHub API (캐시 60초, 로그인 없이 IP 당 시간 60번) 우선, 막히면 raw 로
 const DATA='https://raw.githubusercontent.com/bizar-r/binance-status/data/status.json';
+const API='https://api.github.com/repos/bizar-r/binance-status/contents/status.json?ref=data';
+let apiOff=0;
+async function getData(){if(Date.now()>apiOff){try{const r=await fetch(API,{cache:'no-store',headers:{Accept:'application/vnd.github.raw'}});
+    if(r.ok)return await r.json();apiOff=Date.now()+15*60000;}catch(e){apiOff=Date.now()+5*60000;}}
+  const r=await fetch(DATA+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('net '+r.status);return await r.json();}
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));const te=new TextEncoder();
 let built=0;
 function getPw(){const m=location.hash.match(/k=([^&]+)/);if(m){try{localStorage.setItem('pw',decodeURIComponent(m[1]))}catch(e){}history.replaceState(null,'',location.pathname);}
@@ -112,12 +118,13 @@ function tick(){if(!built)return;const s=Math.round(Date.now()/1000-built),el=do
   el.textContent='마지막 갱신 '+t+' ('+(s<90?s+'초':Math.round(s/60)+'분')+' 전)';el.className='sub'+(s>900?' bad':'');if(s>900)el.textContent+=' · PC 올리기 멈춤?';}
 async function load(){const pw=getPw();const m=document.getElementById('m');
   if(!pw){m.innerHTML=LOGIN;return;}
-  try{const r=await fetch(DATA+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('net '+r.status);
-    const open=openGet(m);const j=await dec(await r.json(),pw);
+  try{const d=await getData();
+    const open=openGet(m);const j=await dec(d,pw);
     m.innerHTML=j.html;built=j.built;openSet(m,open);uiRestore();tick();}
   catch(e){if(e.message==='pw'){try{localStorage.removeItem('pw')}catch(_){};m.innerHTML=LOGIN;}else document.getElementById('age').textContent='받기 실패 — 잠시 뒤 다시';}}
 function login(){const v=document.getElementById('pw').value.trim();if(!v)return;try{localStorage.setItem('pw',v)}catch(e){};load();}
 const LOGIN="<section><h2>로그인</h2><p>텔레그램으로 받은 링크를 누르거나 비밀번호를 넣어 주세요 (이 폰에 저장됩니다).</p><p><input id='pw' type='password' style='width:100%;padding:10px;font-size:16px'></p><p><button onclick='login()'>열기</button></p></section>";
-setInterval(tick,5000);setInterval(()=>{if(!document.hidden)load()},60000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});load();
+let lastLoad=0;function load2(){if(Date.now()-lastLoad<20000)return;lastLoad=Date.now();load();}
+setInterval(tick,5000);setInterval(()=>{if(!document.hidden)load2()},75000);   // 75초 = 시간 48번 (API 한도 60번 안)
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)load2()});load2();
 </script></body></html>
